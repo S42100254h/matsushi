@@ -21,15 +21,24 @@ class LinebotController < ApplicationController
         when Line::Bot::Event::MessageType::Text
           # event.message['text']：ユーザーから送られたメッセージ
           input = event.message['text']
+          explain = "数字を選択してください\n\n↓↓↓↓↓\n1. 「来月の20日予定ある？」\n2. 「あ、はるにゃんだ！！」\n3. 「あ、島田だ！！」\n4. 「松下くんかっこいい！」"
 
-        else
-
+          case input
+          when "1"
+            push = "ごめん。\nその日家族と定山渓行くから無理。"
+          when "2"
+            push = "はるにゃん！！ぐふふ。ごちです。"
+          when "3"
+            push = "は？野郎になんて興味ねーよ。リア充爆発しろ！"
+          when "4"
+            push = "ぐふ。べ、べつに嬉しくなんてないんだからね！ぐふ。"
+          else
+            push = "説明をちゃんと読んでください。数字を選んでって言ってるじゃないですか。\nアラサーになってまで何やってんの？"
+          end
         end
+
+        message = [{ type: 'text', text: push }, { type: 'text', text: explain }]
         
-        message = {
-          type: 'text',
-          text: push
-        }
         client.reply_message(event['replyToken'], message)
         
       # LINEお友達追された場合（機能②）
