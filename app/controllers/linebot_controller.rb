@@ -23,9 +23,12 @@ class LinebotController < ApplicationController
           input = event.message['text']
           explain = "数字を選択してください\n\n↓↓↓↓↓\n1. 「TVで恋愛ものとか見てんでしょ？」\n2. 「家に遊びに行ってもいい？」\n3. 「あ、島田だ！！」\n4. 「最近太った？」"
 
+          rand = rand(0..1)
+
+          massages = [["いやぁ、徳井消えてからテラハも見なくなったわー", "み、みてるわけないだろ。", "そんなじゃもう楽しめない大人な男になったわー"], [], [], []]
           case input
           when "1"
-            push = "いやぁ、徳井消えてからテラハも見なくなったわー"
+            push = messages[input - 1][rand]
           when "2"
             push = "女の子居るから無理だわー。\nおい、オレが滑ったみたいになったじゃねぇか！"
           when "3"
