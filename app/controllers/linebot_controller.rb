@@ -12,7 +12,7 @@ class LinebotController < ApplicationController
     end
 
     events = client.parse_events_from(body)
-    events.each { |event|
+    events.each do |event|
       case event
       # メッセージが送信された場合の対応（機能①）
       when Line::Bot::Event::Message
@@ -53,7 +53,7 @@ class LinebotController < ApplicationController
         line_id = event['source']['userId']
         User.find_by(line_id: line_id).destroy
       end
-    }
+    end
     head :ok
   end
 
