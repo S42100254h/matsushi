@@ -12,7 +12,7 @@ class LinebotController < ApplicationController
     end
 
     events = client.parse_events_from(body)
-    events.each { |event|
+    events.each do |event|
       case event
       # メッセージが送信された場合の対応（機能①）
       when Line::Bot::Event::Message
@@ -21,17 +21,20 @@ class LinebotController < ApplicationController
         when Line::Bot::Event::MessageType::Text
           # event.message['text']：ユーザーから送られたメッセージ
           input = event.message['text']
-          explain = "数字を選択してください\n\n↓↓↓↓↓\n1. 「来月の20日予定ある？」\n2. 「あ、はるにゃんだ！！」\n3. 「あ、島田だ！！」\n4. 「松下くんかっこいい！」"
+          explain = "数字を選択してください\n\n↓↓↓↓↓\n1. 「TVで恋愛ものとか見てんでしょ？」\n2. 「家に遊びに行ってもいい？」\n3. 「あ、島田だ！！」\n4. 「最近太った？」"
 
+          rand = rand(0..1)
+
+          massages = [["いやぁ、徳井消えてからテラハも見なくなったわー", "み、みてるわけないだろ。", "そんなじゃもう楽しめない大人な男になったわー"], [], [], []]
           case input
           when "1"
-            push = "ごめん。\nその日家族と定山渓行くから無理。"
+            push = messages[input - 1][rand]
           when "2"
-            push = "はるにゃん！！ぐふふ。ごちです。"
+            push = "女の子居るから無理だわー。\nおい、オレが滑ったみたいになったじゃねぇか！"
           when "3"
             push = "は？野郎になんて興味ねーよ。リア充爆発しろ！"
           when "4"
-            push = "ぐふ。べ、べつに嬉しくなんてないんだからね！ぐふ。"
+            push = "うるせぇ、お前らの本名をネットの海に晒すぞ！笑"
           else
             push = "説明をちゃんと読んでください。数字を選んでって言ってるじゃないですか。\nアラサーになってまで何やってんの？"
           end
@@ -53,7 +56,7 @@ class LinebotController < ApplicationController
         line_id = event['source']['userId']
         User.find_by(line_id: line_id).destroy
       end
-    }
+    end
     head :ok
   end
 
