@@ -21,7 +21,7 @@ class LinebotController < ApplicationController
         when Line::Bot::Event::MessageType::Text
           # event.message['text']：ユーザーから送られたメッセージ
           input = event.message['text']
-          explain = "数字を選択してください\n\n↓↓↓↓↓\n1. 「TVで恋愛ものとか見てんでしょ？」\n2. 「家に遊びに行ってもいい？」\n3. 「あ、島田だ！！」\n4. 「最近太った？」"
+          explain = "数字を選択してください\n\n↓↓↓↓↓\n1. 「TVで恋愛ものとか見てんでしょ？」\n2. 「家に遊びに行ってもいい？」\n3. 「あ、島田だ！！」\n4. 「最近太った？」\n5. 「今日雨降るか教えて」"
 
           messages = [
             ["いやぁ、徳井消えてからテラハも見なくなったわー", "み、みてるわけないだろ（でゅふ）", "そんなじゃもう楽しめない大人な男になったわー", "バチェラー見てないの？人生のバイブルでしょ。"],
@@ -42,6 +42,17 @@ class LinebotController < ApplicationController
           when "4"
             rand = rand(0..2)
             push = messages[input.to_i - 1][rand]
+          when "5"
+            push = "今どこに住んでるか教えて！\n「東京」、「千葉」、「札幌」、「苫小牧」、「愛知」"
+          when /.*(東京|とうきょう).*/
+
+          when /.*(千葉|ちば).*/
+
+          when /.*(札幌|さっぽろ).*/
+
+          when /.*(岩見沢|いわみざわ).*/
+
+          when /.*(苫小牧|とまこまい).*/
           else
             push = "説明をちゃんと読めよ。数字を選んでって言ってるじゃん。\nアラサーになってまで何やってんの？"
           end
