@@ -1,5 +1,8 @@
 class LinebotController < ApplicationController
   require 'line/bot'
+  require 'open-uri'
+  require 'kconv'
+  require 'rexml/document'
 
   # callbackアクションのCSRFトークン認証を無効
   protect_from_forgery :except => [:callback]
@@ -21,7 +24,7 @@ class LinebotController < ApplicationController
         when Line::Bot::Event::MessageType::Text
           # event.message['text']：ユーザーから送られたメッセージ
           input = event.message['text']
-          explain = "数字を選択してください\n\n↓↓↓↓↓\n1. 「TVで恋愛ものとか見てんでしょ？」\n2. 「家に遊びに行ってもいい？」\n3. 「あ、島田だ！！」\n4. 「最近太った？」"
+          explain = "数字を選択してください\n\n↓↓↓↓↓\n1. 「TVで恋愛ものとか見てんでしょ？」\n2. 「家に遊びに行ってもいい？」\n3. 「あ、島田だ！！」\n4. 「最近太った？」\n5. 「今日雨降るか教えて」"
 
           messages = [
             ["いやぁ、徳井消えてからテラハも見なくなったわー", "み、みてるわけないだろ（でゅふ）", "そんなじゃもう楽しめない大人な男になったわー", "バチェラー見てないの？人生のバイブルでしょ。"],
@@ -42,6 +45,30 @@ class LinebotController < ApplicationController
           when "4"
             rand = rand(0..2)
             push = messages[input.to_i - 1][rand]
+          when "5"
+            push = "今どこに住んでるか教えて！\n「東京」、「千葉」、「札幌」、「苫小牧」、「愛知」"
+          when /.*(東京|とうきょう).*/
+
+          when /.*(千葉|ちば).*/
+
+          when /.*(札幌|さっぽろ).*/
+            url  = "https://www.drk7.jp/weather/xml/01.xml"
+            xml  = open( url ).read.toutf8
+            doc = REXML::Document.new(xml)
+            xpath = 'weatherforecast/pref/area[11]/'
+
+            min_per = 20
+            per06to12 = doc.elements[xpath + 'info/rainfallchance/period[2]l'].text
+            per12to18 = doc.elements[xpath + 'info/rainfallchance/period[3]l'].text
+            per18to24 = doc.elements[xpath + 'info/rainfallchance/period[4]l'].text
+            if per06to12.to_i >= min_per || per12to18.to_i >= min_per || per18to24.to_i >= min_per
+              push =　"今日は雨が降りそうだから傘があった方が良いよ。\n　6〜12時　#{per06to12}％\n　12〜18時　 #{per12to18}％\n　18〜24時　#{per18to24}％"
+            else
+              push = "今日は雨は降らなさそうだよ。今日も一日頑張るだにゃん！！"
+            end
+          when /.*(岩見沢|いわみざわ).*/
+
+          when /.*(苫小牧|とまこまい).*/
           else
             push = "説明をちゃんと読めよ。数字を選んでって言ってるじゃん。\nアラサーになってまで何やってんの？"
           end
