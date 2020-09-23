@@ -52,7 +52,20 @@ class LinebotController < ApplicationController
           when /.*(千葉|ちば).*/
 
           when /.*(札幌|さっぽろ).*/
+            url  = "https://www.drk7.jp/weather/xml/01.xml"
+            xml  = open( url ).read.toutf8
+            doc = REXML::Document.new(xml)
+            xpath = 'weatherforecast/pref/area[11]/'
 
+            min_per = 20
+            per06to12 = doc.elements[xpath + 'info/rainfallchance/period[2]l'].text
+            per12to18 = doc.elements[xpath + 'info/rainfallchance/period[3]l'].text
+            per18to24 = doc.elements[xpath + 'info/rainfallchance/period[4]l'].text
+            if per06to12.to_i >= min_per || per12to18.to_i >= min_per || per18to24.to_i >= min_per
+              push =　"今日は雨が降りそうだから傘があった方が良いよ。\n　6〜12時　#{per06to12}％\n　12〜18時　 #{per12to18}％\n　18〜24時　#{per18to24}％"
+            else
+              push = "今日は雨は降らなさそうだよ。今日も一日頑張るだにゃん！！"
+            end
           when /.*(岩見沢|いわみざわ).*/
 
           when /.*(苫小牧|とまこまい).*/
