@@ -23,8 +23,6 @@ class LinebotController < ApplicationController
           input = event.message['text']
           explain = "数字を選択してください\n\n↓↓↓↓↓\n1. 「TVで恋愛ものとか見てんでしょ？」\n2. 「家に遊びに行ってもいい？」\n3. 「あ、島田だ！！」\n4. 「最近太った？」"
 
-          rand = rand(0..1)
-
           messages = [
             ["いやぁ、徳井消えてからテラハも見なくなったわー", "み、みてるわけないだろ（でゅふ）", "そんなじゃもう楽しめない大人な男になったわー", "バチェラー見てないの？人生のバイブルでしょ。"],
             ["女の子居るから無理だわー。\nおい、オレが滑ったみたいになったじゃねぇか！", "ごめん。\nその日家族と定山渓に行ってるから無理だわー。"],
@@ -33,12 +31,16 @@ class LinebotController < ApplicationController
           ]
           case input
           when "1"
+            rand = rand(0..3)
             push = messages[input.to_i - 1][rand]
           when "2"
+            rand = rand(0..2)
             push = messages[input.to_i - 1][rand]
           when "3"
+            rand = rand(0..1)
             push = messages[input.to_i - 1][rand]
           when "4"
+            rand = rand(0..2)
             push = messages[input.to_i - 1][rand]
           else
             push = "説明をちゃんと読めよ。数字を選んでって言ってるじゃん。\nアラサーになってまで何やってんの？"
