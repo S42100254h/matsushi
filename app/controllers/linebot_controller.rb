@@ -1,5 +1,8 @@
 class LinebotController < ApplicationController
   require 'line/bot'
+  require 'open-uri'
+  require 'kconv'
+  require 'rexml/document'
 
   # callbackアクションのCSRFトークン認証を無効
   protect_from_forgery :except => [:callback]
