@@ -25,10 +25,10 @@ class LinebotController < ApplicationController
 
           rand = rand(0..1)
 
-          massages = [["いやぁ、徳井消えてからテラハも見なくなったわー", "み、みてるわけないだろ。", "そんなじゃもう楽しめない大人な男になったわー"], [], [], []]
+          messages = [["いやぁ、徳井消えてからテラハも見なくなったわー", "み、みてるわけないだろ。", "そんなじゃもう楽しめない大人な男になったわー"], [], [], []]
           case input
           when "1"
-            push = messages[input - 1][rand]
+            push = messages[input.to_i - 1][rand]
           when "2"
             push = "女の子居るから無理だわー。\nおい、オレが滑ったみたいになったじゃねぇか！"
           when "3"
