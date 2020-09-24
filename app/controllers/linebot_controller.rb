@@ -26,31 +26,47 @@ class LinebotController < ApplicationController
           input = event.message['text']
           explain = "数字を選択してください\n\n↓↓↓↓↓\n1. 「TVで恋愛ものとか見てんでしょ？」\n2. 「家に遊びに行ってもいい？」\n3. 「あ、島田だ！！」\n4. 「最近太った？」\n5. 「今日雨降るか教えて」"
 
-          messages = [
-            ["いやぁ、徳井消えてからテラハも見なくなったわー", "み、みてるわけないだろ（でゅふ）", "そんなじゃもう楽しめない大人な男になったわー", "バチェラー見てないの？人生のバイブルでしょ。"],
-            ["女の子居るから無理だわー。\nおい、オレが滑ったみたいになったじゃねぇか！", "ごめん。\nその日家族と定山渓に行ってるから無理だわー。"],
-            ["は？野郎になんて興味ねーよ。リア充爆発しろ！", "あ？うん。"],
-            ["うるせぇ、お前らの本名をネットの海に晒すぞ！笑", "幸せ太りだわ（どや）", "いやいや、岡部さんの方が太ったでしょ笑"]
-          ]
           case input
           when "1"
-            rand = rand(0..3)
-            push = messages[input.to_i - 1][rand]
+            push = ["いやぁ、徳井消えてからテラハも見なくなったわー", "み、みてるわけないだろ（でゅふ）", "そんなじゃもう楽しめない大人な男になったわー", "バチェラー見てないの？人生のバイブルでしょ。"].sample
           when "2"
-            rand = rand(0..2)
-            push = messages[input.to_i - 1][rand]
+            push = ["女の子居るから無理だわー。\nおい、オレが滑ったみたいになったじゃねぇか！", "ごめん。\nその日家族と定山渓に行ってるから無理だわー。"].sample
           when "3"
-            rand = rand(0..1)
-            push = messages[input.to_i - 1][rand]
+            push = ["は？野郎になんて興味ねーよ。リア充爆発しろ！", "あ？うん。"].sample
           when "4"
-            rand = rand(0..2)
-            push = messages[input.to_i - 1][rand]
+            push = ["うるせぇ、お前らの本名をネットの海に晒すぞ！笑", "幸せ太りだわ（どや）", "いやいや、岡部さんの方が太ったでしょ笑"].sample
           when "5"
             push = "今どこに住んでるか教えて！\n「東京」、「千葉」、「札幌」、「苫小牧」、「愛知」"
           when /.*(東京|とうきょう).*/
+            url  = "https://www.drk7.jp/weather/xml/13.xml"
+            xml  = open( url ).read.toutf8
+            doc = REXML::Document.new(xml)
+            xpath = 'weatherforecast/pref/area[4]/'
 
+            min_per = 20
+            per06to12 = doc.elements[xpath + 'info/rainfallchance/period[2]l'].text
+            per12to18 = doc.elements[xpath + 'info/rainfallchance/period[3]l'].text
+            per18to24 = doc.elements[xpath + 'info/rainfallchance/period[4]l'].text
+            if per06to12.to_i >= min_per || per12to18.to_i >= min_per || per18to24.to_i >= min_per
+              push =　"今日は雨が降りそうだから傘があった方が良いよ。\n　6〜12時　#{per06to12}％\n　12〜18時　 #{per12to18}％\n　18〜24時　#{per18to24}％"
+            else
+              push = "今日は雨は降らなさそうだよ。今日も一日頑張るだにゃん！！"
+            end
           when /.*(千葉|ちば).*/
+            url  = "https://www.drk7.jp/weather/xml/12.xml"
+            xml  = open( url ).read.toutf8
+            doc = REXML::Document.new(xml)
+            xpath = 'weatherforecast/pref/area[2]/'
 
+            min_per = 20
+            per06to12 = doc.elements[xpath + 'info/rainfallchance/period[2]l'].text
+            per12to18 = doc.elements[xpath + 'info/rainfallchance/period[3]l'].text
+            per18to24 = doc.elements[xpath + 'info/rainfallchance/period[4]l'].text
+            if per06to12.to_i >= min_per || per12to18.to_i >= min_per || per18to24.to_i >= min_per
+              push =　"今日は雨が降りそうだから傘があった方が良いよ。\n　6〜12時　#{per06to12}％\n　12〜18時　 #{per12to18}％\n　18〜24時　#{per18to24}％"
+            else
+              push = "今日は雨は降らなさそうだよ。今日も一日頑張るだにゃん！！"
+            end
           when /.*(札幌|さっぽろ).*/
             url  = "https://www.drk7.jp/weather/xml/01.xml"
             xml  = open( url ).read.toutf8
@@ -67,8 +83,20 @@ class LinebotController < ApplicationController
               push = "今日は雨は降らなさそうだよ。今日も一日頑張るだにゃん！！"
             end
           when /.*(岩見沢|いわみざわ).*/
+            url  = "https://www.drk7.jp/weather/xml/01.xml"
+            xml  = open( url ).read.toutf8
+            doc = REXML::Document.new(xml)
+            xpath = 'weatherforecast/pref/area[15]/'
 
-          when /.*(苫小牧|とまこまい).*/
+            min_per = 20
+            per06to12 = doc.elements[xpath + 'info/rainfallchance/period[2]l'].text
+            per12to18 = doc.elements[xpath + 'info/rainfallchance/period[3]l'].text
+            per18to24 = doc.elements[xpath + 'info/rainfallchance/period[4]l'].text
+            if per06to12.to_i >= min_per || per12to18.to_i >= min_per || per18to24.to_i >= min_per
+              push =　"今日は雨が降りそうだから傘があった方が良いよ。\n　6〜12時　#{per06to12}％\n　12〜18時　 #{per12to18}％\n　18〜24時　#{per18to24}％"
+            else
+              push = "今日は雨は降らなさそうだよ。今日も一日頑張るだにゃん！！"
+            end
           else
             push = "説明をちゃんと読めよ。数字を選んでって言ってるじゃん。\nアラサーになってまで何やってんの？"
           end
