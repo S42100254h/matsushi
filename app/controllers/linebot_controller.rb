@@ -56,7 +56,7 @@ class LinebotController < ApplicationController
             url  = "https://www.drk7.jp/weather/xml/12.xml"
             xml  = open( url ).read.toutf8
             doc = REXML::Document.new(xml)
-            xpath = 'weatherforecast/pref/area[2]/'
+            xpath = 'weatherforecast/pref/area[2]/info/rainfallchance/'
 
             min_per = 20
             per06to12 = doc.elements[xpath + 'info/rainfallchance/period[2]l'].text
@@ -71,7 +71,7 @@ class LinebotController < ApplicationController
             url  = "https://www.drk7.jp/weather/xml/01.xml"
             xml  = open( url ).read.toutf8
             doc = REXML::Document.new(xml)
-            xpath = 'weatherforecast/pref/area[11]/'
+            xpath = 'weatherforecast/pref/area[11]/info/rainfallchance/'
 
             min_per = 20
             per06to12 = doc.elements[xpath + 'info/rainfallchance/period[2]l'].text
@@ -86,7 +86,7 @@ class LinebotController < ApplicationController
             url  = "https://www.drk7.jp/weather/xml/01.xml"
             xml  = open( url ).read.toutf8
             doc = REXML::Document.new(xml)
-            xpath = 'weatherforecast/pref/area[15]/'
+            xpath = 'weatherforecast/pref/area[15]/info/rainfallchance/'
 
             min_per = 20
             per06to12 = doc.elements[xpath + 'info/rainfallchance/period[2]l'].text
