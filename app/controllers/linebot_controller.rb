@@ -38,81 +38,15 @@ class LinebotController < ApplicationController
           when "5"
             push = "今どこに住んでるか教えて！\n「東京」、「千葉」、「札幌」、「苫小牧」、「愛知」"
           when /.*(東京|とうきょう).*/
-            url = "https://www.drk7.jp/weather/xml/13.xml"
-            xml = open( url ).read.toutf8
-            doc = REXML::Document.new(xml)
-            xpath = 'weatherforecast/pref/area[4]/'
-
-            min_per = 20
-            per06to12 = doc.elements[xpath + 'info/rainfallchance/period[2]'].text
-            per12to18 = doc.elements[xpath + 'info/rainfallchance/period[3]'].text
-            per18to24 = doc.elements[xpath + 'info/rainfallchance/period[4]'].text
-            if per06to12.to_i >= min_per || per12to18.to_i >= min_per || per18to24.to_i >= min_per
-              push = "今日は雨が降りそうだから傘があった方が良いよ。\n　6〜12時　#{per06to12}％\n　12〜18時　 #{per12to18}％\n　18〜24時　#{per18to24}％"
-            else
-              push = "今日は雨は降らなさそうだよ。今日も一日頑張るだにゃん！！"
-            end
+            set_rainy_percent(13, 4)
           when /.*(千葉|ちば).*/
-            url = "https://www.drk7.jp/weather/xml/12.xml"
-            xml = open( url ).read.toutf8
-            doc = REXML::Document.new(xml)
-            xpath = 'weatherforecast/pref/area[2]/'
-
-            min_per = 20
-            per06to12 = doc.elements[xpath + 'info/rainfallchance/period[2]'].text
-            per12to18 = doc.elements[xpath + 'info/rainfallchance/period[3]'].text
-            per18to24 = doc.elements[xpath + 'info/rainfallchance/period[4]'].text
-            if per06to12.to_i >= min_per || per12to18.to_i >= min_per || per18to24.to_i >= min_per
-              push = "今日は雨が降りそうだから傘があった方が良いよ。\n　6〜12時　#{per06to12}％\n　12〜18時　 #{per12to18}％\n　18〜24時　#{per18to24}％"
-            else
-              push = "今日は雨は降らなさそうだよ。今日も一日頑張るだにゃん！！"
-            end
-
+            set_rainy_percent(12, 2)
           when /.*(札幌|さっぽろ).*/
-            url = "https://www.drk7.jp/weather/xml/01.xml"
-            xml = open( url ).read.toutf8
-            doc = REXML::Document.new(xml)
-            xpath = 'weatherforecast/pref/area[11]/'
-
-            min_per = 20
-            per06to12 = doc.elements[xpath + 'info/rainfallchance/period[2]'].text
-            per12to18 = doc.elements[xpath + 'info/rainfallchance/period[3]'].text
-            per18to24 = doc.elements[xpath + 'info/rainfallchance/period[4]'].text
-            if per06to12.to_i >= min_per || per12to18.to_i >= min_per || per18to24.to_i >= min_per
-              push = "今日は雨が降りそうだから傘があった方が良いよ。\n　6〜12時　#{per06to12}％\n　12〜18時　 #{per12to18}％\n　18〜24時　#{per18to24}％"
-            else
-              push = "今日は雨は降らなさそうだよ。今日も一日頑張るだにゃん！！"
-            end
+            set_rainy_percent(01, 11)
           when /.*(岩見沢|いわみざわ).*/
-            url = "https://www.drk7.jp/weather/xml/01.xml"
-            xml = open( url ).read.toutf8
-            doc = REXML::Document.new(xml)
-            xpath = 'weatherforecast/pref/area[15]/'
-
-            min_per = 20
-            per06to12 = doc.elements[xpath + 'info/rainfallchance/period[2]'].text
-            per12to18 = doc.elements[xpath + 'info/rainfallchance/period[3]'].text
-            per18to24 = doc.elements[xpath + 'info/rainfallchance/period[4]'].text
-            if per06to12.to_i >= min_per || per12to18.to_i >= min_per || per18to24.to_i >= min_per
-              push = "今日は雨が降りそうだから傘があった方が良いよ。\n　6〜12時　#{per06to12}％\n　12〜18時　 #{per12to18}％\n　18〜24時　#{per18to24}％"
-            else
-              push = "今日は雨は降らなさそうだよ。今日も一日頑張るだにゃん！！"
-            end
+            set_rainy_percent(01, 15)
           when /.*(愛知|あいち).*/
-            url = "https://www.drk7.jp/weather/xml/23.xml"
-            xml = open( url ).read.toutf8
-            doc = REXML::Document.new(xml)
-            xpath = 'weatherforecast/pref/area[1]/'
-
-            min_per = 20
-            per06to12 = doc.elements[xpath + 'info/rainfallchance/period[2]'].text
-            per12to18 = doc.elements[xpath + 'info/rainfallchance/period[3]'].text
-            per18to24 = doc.elements[xpath + 'info/rainfallchance/period[4]'].text
-            if per06to12.to_i >= min_per || per12to18.to_i >= min_per || per18to24.to_i >= min_per
-              push = "今日は雨が降りそうだから傘があった方が良いよ。\n　6〜12時　#{per06to12}％\n　12〜18時　 #{per12to18}％\n　18〜24時　#{per18to24}％"
-            else
-              push = "今日は雨は降らなさそうだよ。今日も一日頑張るだにゃん！！"
-            end
+            set_rainy_percent(23, 1)
           else
             push = "説明をちゃんと読めよ。数字を選んでって言ってるじゃん。\nアラサーになってまで何やってんの？"
           end
