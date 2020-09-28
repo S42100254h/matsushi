@@ -42,8 +42,8 @@ class LinebotController < ApplicationController
           when /.*(千葉|ちば).*/
 
           when /.*(札幌|さっぽろ).*/
-            url  = "https://www.drk7.jp/weather/xml/01.xml"
-            xml  = open( url ).read.toutf8
+            url = "https://www.drk7.jp/weather/xml/01.xml"
+            xml = open( url ).read.toutf8
             doc = REXML::Document.new(xml)
             xpath = 'weatherforecast/pref/area[11]/'
 
