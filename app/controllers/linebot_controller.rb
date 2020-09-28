@@ -146,4 +146,21 @@ class LinebotController < ApplicationController
         config.channel_token = ENV["LINE_CHANNEL_TOKEN"]
       }
     end
+
+    def set_rainy_percent(prefNum, areaNum)
+      url = "https://www.drk7.jp/weather/xml/#{prefNum}.xml"
+      xml = open( url ).read.toutf8
+      doc = REXML::Document.new(xml)
+      xpath = "weatherforecast/pref/area[#{areaNum}]/"
+
+      min_per = 20
+      per06to12 = doc.elements[xpath + 'info/rainfallchance/period[2]'].text
+      per12to18 = doc.elements[xpath + 'info/rainfallchance/period[3]'].text
+      per18to24 = doc.elements[xpath + 'info/rainfallchance/period[4]'].text
+      if per06to12.to_i >= min_per || per12to18.to_i >= min_per || per18to24.to_i >= min_per
+        push = "今日は雨が降りそうだから傘があった方が良いよ。\n　6〜12時　#{per06to12}％\n　12〜18時　 #{per12to18}％\n　18〜24時　#{per18to24}％"
+      else
+        push = "今日は雨は降らなさそうだよ。今日も一日頑張るだにゃん！！"
+      end
+    end
 end
