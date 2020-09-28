@@ -42,9 +42,9 @@ class LinebotController < ApplicationController
           when /.*(千葉|ちば).*/
             push = set_rainy_percent(12, 2)
           when /.*(札幌|さっぽろ).*/
-            push = set_rainy_percent(01, 11)
+            push = set_rainy_percent("01", 11)
           when /.*(岩見沢|いわみざわ).*/
-            push = set_rainy_percent(01, 15)
+            push = set_rainy_percent("01", 15)
           when /.*(愛知|あいち).*/
             push = set_rainy_percent(23, 1)
           else
