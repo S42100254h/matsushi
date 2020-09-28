@@ -38,15 +38,15 @@ class LinebotController < ApplicationController
           when "5"
             push = "今どこに住んでるか教えて！\n「東京」、「千葉」、「札幌」、「苫小牧」、「愛知」"
           when /.*(東京|とうきょう).*/
-            set_rainy_percent(13, 4)
+            push = set_rainy_percent(13, 4)
           when /.*(千葉|ちば).*/
-            set_rainy_percent(12, 2)
+            push = set_rainy_percent(12, 2)
           when /.*(札幌|さっぽろ).*/
-            set_rainy_percent(01, 11)
+            push = set_rainy_percent(01, 11)
           when /.*(岩見沢|いわみざわ).*/
-            set_rainy_percent(01, 15)
+            push = set_rainy_percent(01, 15)
           when /.*(愛知|あいち).*/
-            set_rainy_percent(23, 1)
+            push = set_rainy_percent(23, 1)
           else
             push = "説明をちゃんと読めよ。数字を選んでって言ってるじゃん。\nアラサーになってまで何やってんの？"
           end
@@ -92,9 +92,9 @@ class LinebotController < ApplicationController
       per12to18 = doc.elements[xpath + 'info/rainfallchance/period[3]'].text
       per18to24 = doc.elements[xpath + 'info/rainfallchance/period[4]'].text
       if per06to12.to_i >= min_per || per12to18.to_i >= min_per || per18to24.to_i >= min_per
-        push = "今日は雨が降りそうだから傘があった方が良いよ。\n　6〜12時　#{per06to12}％\n　12〜18時　 #{per12to18}％\n　18〜24時　#{per18to24}％"
+        return "今日は雨が降りそうだから傘があった方が良いよ。\n　6〜12時　#{per06to12}％\n　12〜18時　 #{per12to18}％\n　18〜24時　#{per18to24}％"
       else
-        push = "今日は雨は降らなさそうだよ。今日も一日頑張るだにゃん！！"
+        return "今日は雨は降らなさそうだよ。今日も一日頑張るだにゃん！！"
       end
     end
 end
