@@ -48,7 +48,7 @@ class LinebotController < ApplicationController
           when /.*(愛知|あいち).*/
             push = set_rainy_percent(23, 1)
           when "6"
-              push = ["む、むちゃぶりwwww", "タイガーーーー！！！\nおい、難波！滑ったじゃねーか！笑", "マグロ、２夜連続放送！！（どや）"]
+            push = ["む、むちゃぶりwwww", "タイガーーーー！！！\nおい、難波！滑ったじゃねーか！笑", "マグロ、２夜連続放送！！（どや）"]
           else
             push = "説明をちゃんと読めよ。数字を選んでって言ってるじゃん。\nアラサーになってまで何やってんの？"
           end
