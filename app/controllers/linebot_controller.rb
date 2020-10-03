@@ -24,7 +24,7 @@ class LinebotController < ApplicationController
         when Line::Bot::Event::MessageType::Text
           # event.message['text']：ユーザーから送られたメッセージ
           input = event.message['text']
-          explain = "数字を選択してください\n\n↓↓↓↓↓\n1. 「TVで恋愛ものとか見てんでしょ？」\n2. 「家に遊びに行ってもいい？」\n3. 「あ、島田だ！！」\n4. 「最近太った？」\n5. 「今日雨降るか教えて」"
+          explain = "数字を選択してください\n\n↓↓↓↓↓\n1. 「TVで恋愛ものとか見てんでしょ？」\n2. 「家に遊びに行ってもいい？」\n3. 「あ、島田だ！！」\n4. 「最近太った？」\n5. 「今日雨降るか教えて」 \n6. 「何かおもしろいこと言って。」"
 
           case input
           when "1"
@@ -47,6 +47,8 @@ class LinebotController < ApplicationController
             push = set_rainy_percent("01", 15)
           when /.*(愛知|あいち).*/
             push = set_rainy_percent(23, 1)
+          when "6"
+              push = ["む、むちゃぶりwwww", "タイガーーーー！！！\nおい、難波！滑ったじゃねーか！笑", "マグロ、２夜連続放送！！（どや）"]
           else
             push = "説明をちゃんと読めよ。数字を選んでって言ってるじゃん。\nアラサーになってまで何やってんの？"
           end
